@@ -24,12 +24,13 @@ import { getFirestore, doc, setDoc, getDoc, onSnapshot }
 
 // ── PASTE YOUR FIREBASE CONFIG HERE ──────────────────
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey: "AIzaSyA60neKh1jDfNPHLK3LK8xykuNs5h-dSy8",
+  authDomain: "habitos-vik.firebaseapp.com",
+  projectId: "habitos-vik",
+  storageBucket: "habitos-vik.firebasestorage.app",
+  messagingSenderId: "706521042975",
+  appId: "1:706521042975:web:45effdef231590dc8fc52a",
+  measurementId: "G-HE79V1RTFF"
 };
 // ─────────────────────────────────────────────────────
 
@@ -40,7 +41,7 @@ let firebaseReady     = false;
 
 /* ── INITIALISE ── */
 try {
-  if (firebaseConfig.apiKey !== 'YOUR_API_KEY') {
+  if (firebaseConfig.apiKey !== "AIzaSyA60neKh1jDfNPHLK3LK8xykuNs5h-dSy8") {
     app           = initializeApp(firebaseConfig);
     auth          = getAuth(app);
     db            = getFirestore(app);
