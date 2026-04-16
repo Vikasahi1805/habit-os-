@@ -66,6 +66,7 @@ if (firebaseReady) {
       subscribeToFirestore(user.uid);
     } else {
       window.__firebaseUser = null;
+      updateSettingsAuthUI(null);
       showAuth();
       stopFirestoreSubscription();
     }
@@ -116,6 +117,49 @@ function updateUserUI(user) {
         ☁ synced
       </span>
     </div>`;
+
+  updateSettingsAuthUI(user);
+}
+
+function updateSettingsAuthUI(user) {
+  const nameEl = document.getElementById('settingsName');
+  const emailEl = document.getElementById('settingsEmail');
+  const avatarEl = document.getElementById('settingsAvatar');
+  const authBtn = document.getElementById('settingsAuthBtn');
+  if (!nameEl || !emailEl || !avatarEl) return;
+
+  if (!user) {
+    avatarEl.textContent = '?';
+    nameEl.textContent = 'Guest User';
+    emailEl.textContent = 'Not signed in';
+    if (authBtn) {
+      authBtn.textContent = '☁ Sign in with Google';
+      authBtn.onclick = () => window.signInWithGoogle();
+    }
+    return;
+  }
+
+  const name = (user.displayName || '').trim();
+  const email = (user.email || '').trim();
+
+  avatarEl.textContent = getInitials(name || email);
+  nameEl.textContent = name || email || 'User';
+  emailEl.textContent = email || '';
+
+  if (authBtn) {
+    authBtn.textContent = 'Sign out';
+    authBtn.onclick = () => window.signOutUser();
+  }
+}
+
+function getInitials(nameOrEmail) {
+  const v = (nameOrEmail || '').trim();
+  if (!v) return '?';
+  if (v.includes('@')) return v.split('@')[0].slice(0, 2).toUpperCase();
+
+  const parts = v.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 function showLocalBanner() {
