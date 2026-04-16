@@ -38,17 +38,20 @@ let app, auth, db;
 let currentUser       = null;
 let unsubscribeSnap   = null;
 let firebaseReady     = false;
+let firebaseInitError = null;
 
 /* ── INITIALISE ── */
 try {
-  if (firebaseConfig.apiKey !== "AIzaSyA60neKh1jDfNPHLK3LK8xykuNs5h-dSy8") {
-    app           = initializeApp(firebaseConfig);
-    auth          = getAuth(app);
-    db            = getFirestore(app);
-    firebaseReady = true;
-  }
+  // Always attempt init; if your config is still a template/invalid, Firebase
+  // will throw and we’ll show the error in the UI.
+  app           = initializeApp(firebaseConfig);
+  auth          = getAuth(app);
+  db            = getFirestore(app);
+  firebaseReady = true;
 } catch (e) {
-  console.warn('[HabitOS] Firebase init failed — running in local mode:', e);
+  firebaseReady     = false;
+  firebaseInitError = e;
+  console.warn('[HabitOS] Firebase init failed:', e);
 }
 
 /* ── AUTH STATE LISTENER ── */
@@ -129,7 +132,7 @@ function showLocalBanner() {
              Sign in to sync ☁
            </button>`
         : `<span style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--text2)">
-             (Firebase not configured)
+             ${firebaseInitError ? '(Firebase init failed)' : '(Firebase not configured)'}
            </span>`}
     </div>`;
 }
